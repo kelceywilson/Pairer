@@ -1,2 +1,0 @@
-# hrHalfHack
-Brainstorm
