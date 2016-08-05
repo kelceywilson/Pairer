@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title></title>
+	<link rel="stylesheet" type="text/css" href="halfhack.css">
 	<script src="https://code.jquery.com/jquery-2.1.1.js"> </script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">
 		body {
 			height: 500px;
@@ -17,48 +19,80 @@
 	</style>
 
 </head>
+
 <body>
 
-<!-- Step 3: Coding
+	<div class="container">
+		<!-- 
 
-The following lists the core web development skills that you should feel comfortable using in your project thus far:
+		Use the Bootstrap grid system to lay out your page - put everything in here 
+		Use some pre-written Bootstrap CSS classes on various elements of your page
 
-Use Markdown to create a README.md file introducing your project. Push to GitHub and see it rendered on your repository's main page
-Create an HTML document using the following HTML tags:
-html, head, title, body
-header and paragraph tags
-bold and italic tags
-divs and spans
-ordered and unordered lists
-images and links
-horizontal rule and line break -->
-<!-- Use a style attribute on an HTML element, then a <style> tag in the head, then a <link> tag to a separate .css document to include CSS styles in your page. Try to use the following CSS properties at a minimum: -->
-<!-- color, background-color, background-image -->
-<!-- font-size, font-family
-height, width, max-width
-margin, padding, border, border-radius
-Refactor your code to use classes and ids.
-Use some complex CSS selectors such as descendent selectors
-Use an iframe to embed videos or maps on your page
-Use float and and position: fixed to position some elements
-Create an HTML form incorporating various inputs (text, password, email, textarea, radio, checkbox, select menu, submit, etc)
-Make your form live using Formspree
-Use the Bootstrap grid system to lay out your page
-Use some pre-written Bootstrap CSS classes on various elements of your page
-Use alert, prompt, and console.log where appropriate
-Set and retrieve values from JavaScript variables
-Use document.querySelector in conjunction with textContent and innerHTML to retrieve and place content on the page
-Use if, elseif and else to implement branching logic on the basis of comparing variables and values
-Use logical and (&&), logical or (||), and the ternary operator
-Use while loops to do work multiple times until a condition is met
-Use the Math object and parseInt
-Use jQuery to select existing HTML elements on the page
-Use jQuery's .css(), .attr(), .text(), .html(), .append(), and .val() to both get and set values
-Use some jQuery effects like .show(), .slideDown() and .fadeOut()
-Stretch Goals
+		-->
+		<h1>heading1</h1>
+		<h2>header1</h2>
+		<p>paragraph</p>
+		<b> - Bold text</b>
+		<strong> - Important text</strong>
+		<ul>
+			<li><i> - Italic text</i></li>
+			<li><em> - Emphasized text</em></li>
+			<li><mark> - Marked text</mark></li>
+			<li><small> - Small text</small></li>
+			<li><del> - Deleted text</del></li>
+			<li><ins> - Inserted text</ins></li>
+			<li><sub> - Subscript text</sub></li>
+			<li><sup> - Superscript text</sup></li>
+		</ul>
+		<ol>
+			<li><div>div</div></li>
+			<li><span>span</span></li>
+		</ol>
+		<img src="">
+		<hr>
+		<a href=""></a>
+		<br>
+		<div class="divClass"></div>
+		<div id="divId"></div>
+		<form action="https://formspree.io/kelcey@wilson.com" method="post"> 
+		<!-- // ensure all input, select and textarea elements have name attribute see formspree.io for instructions-->
+			<input type="text" value="DEFAULT Text" name="">
+			<input type="submit" value="Submit">
 
-Use some of Bootstrap's JavaScript utilties
-Try incorporating some jQuery Plug-ins
+		<!-- 
+		The <fieldset> element groups related data in a form.
+
+		The <legend> element defines a caption for the <fieldset> element. 
+		use these elements:
+		text, password, email, textarea, radio, checkbox, select menu, submit, etc)
+		-->
+		</form>
+
+
+	</div>
+
+
+
+<script type="text/javascript">
+
+// Use some complex CSS selectors such as descendent selectors
+// Use an iframe to embed videos or maps on your page
+// Use float and and position: fixed to position some elements
+
+// Use alert, prompt, and console.log where appropriate
+// Set and retrieve values from JavaScript variables
+// Use document.querySelector in conjunction with textContent and innerHTML to retrieve and place content on the page
+// Use if, elseif and else to implement branching logic on the basis of comparing variables and values
+// Use logical and (&&), logical or (||), and the ternary operator
+// Use while loops to do work multiple times until a condition is met
+// Use the Math object and parseInt
+// Use jQuery to select existing HTML elements on the page
+// Use jQuery's .css(), .attr(), .text(), .html(), .append(), and .val() to both get and set values
+// Use some jQuery effects like .show(), .slideDown() and .fadeOut()
+// Stretch Goals
+
+// Use some of Bootstrap's JavaScript utilties
+// Try incorporating some jQuery Plug-ins
 
 	<img id="ghost" src="http://i.giphy.com/pFftCVzgrHh4I.gif">
 
