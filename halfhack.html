@@ -3,117 +3,190 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="halfhack.css">
-	<script src="https://code.jquery.com/jquery-2.1.1.js"> </script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<style type="text/css">
-		body {
-			height: 500px;
-			width: 700px;
-		}
-
-		#ghost {
-			height: 100px;
-			position: fixed;
-		}
-
-	</style>
-
+	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+	<script src="http://underscorejs.org/underscore-min.js"></script>
 </head>
 
 <body>
-
 	<div class="container">
-		<!-- 
-
-		Use the Bootstrap grid system to lay out your page - put everything in here 
-		Use some pre-written Bootstrap CSS classes on various elements of your page
-
-		-->
-		<h1>heading1</h1>
-		<h2>header1</h2>
-		<p>paragraph</p>
-		<b> - Bold text</b>
-		<strong> - Important text</strong>
-		<ul>
-			<li><i> - Italic text</i></li>
-			<li><em> - Emphasized text</em></li>
-			<li><mark> - Marked text</mark></li>
-			<li><small> - Small text</small></li>
-			<li><del> - Deleted text</del></li>
-			<li><ins> - Inserted text</ins></li>
-			<li><sub> - Subscript text</sub></li>
-			<li><sup> - Superscript text</sup></li>
-		</ul>
-		<ol>
-			<li><div>div</div></li>
-			<li><span>span</span></li>
-		</ol>
-		<img src="">
-		<hr>
-		<a href=""></a>
-		<br>
-		<div class="divClass"></div>
-		<div id="divId"></div>
-		<form action="https://formspree.io/kelcey@wilson.com" method="post"> 
+		<form id="studentForm" action="https://formspree.io/kelcey@wilson.com" method="post"> 
 		<!-- // ensure all input, select and textarea elements have name attribute see formspree.io for instructions-->
-			<input type="text" value="DEFAULT Text" name="">
+			<input type="text" value="full name" name="fullname"><br>
+			<input type="email" value="email address" name="email"><br>
 			<input type="submit" value="Submit">
 
-		<!-- 
-		The <fieldset> element groups related data in a form.
-
-		The <legend> element defines a caption for the <fieldset> element. 
-		use these elements:
-		text, password, email, textarea, radio, checkbox, select menu, submit, etc)
-		-->
 		</form>
-
-
 	</div>
-
-
-
 <script type="text/javascript">
+// !!  action item -- put js in seperate file
 
-// Use some complex CSS selectors such as descendent selectors
-// Use an iframe to embed videos or maps on your page
-// Use float and and position: fixed to position some elements
+/*
+ Write script to create as many unique pairs as possible out of a class list
+ and then assign each of those pairs a day, ensuring a) that all individuals are paired everay day, and b) that no individual is assigned to the same day twice.
+ 	Once this is completed, be sure deal with an class composed of an odd number of indivisuals.
+ 	Probably best to assign a fake person to the leftover individual. 
+*/
 
-// Use alert, prompt, and console.log where appropriate
-// Set and retrieve values from JavaScript variables
-// Use document.querySelector in conjunction with textContent and innerHTML to retrieve and place content on the page
-// Use if, elseif and else to implement branching logic on the basis of comparing variables and values
-// Use logical and (&&), logical or (||), and the ternary operator
-// Use while loops to do work multiple times until a condition is met
-// Use the Math object and parseInt
-// Use jQuery to select existing HTML elements on the page
-// Use jQuery's .css(), .attr(), .text(), .html(), .append(), and .val() to both get and set values
-// Use some jQuery effects like .show(), .slideDown() and .fadeOut()
-// Stretch Goals
+// for demonsration purposes, create a function that builds a students array of any size
+var students = [];
 
-// Use some of Bootstrap's JavaScript utilties
-// Try incorporating some jQuery Plug-ins
+classPopulator = function(size) {
+	for (var i = 0; i < size; i++) {
+		students[i] = [{}]; // you have to create the empty object before you can assign it properties
+		var nameValue = i.toString();
+		var emailValue = i.toString() + "@foo.com";
+		students[i]['name'] = nameValue;
+		students[i]['email'] = emailValue;
+	}
+}
 
-	<img id="ghost" src="http://i.giphy.com/pFftCVzgrHh4I.gif">
+// !!  action item -- change this so that classPopulator runs after input box is filled and Submit button is pressed
+var classSize = parseInt(prompt("What size is your class?"));
+classPopulator(classSize);
 
-	<script type="text/javascript">
-		var downMouse = false;
 
-		$('body').mousedown( function() {
-			downMouse = true;
-		});
+// Build array of just student emails
 
-		$('body').mouseup( function() {
-			downMouse = false;
-		});
+var studentEmails = students.map(function(studentObj, i){
+  return studentObj.email;
+});
 
-		$('html').mousemove( function(){
-			if (downMouse === true) {
-				event.preventDefault();
-			   $('#ghost').css('left', event.pageX - event.pageX/4);
-			   $('#ghost').css('top', event.pageY - event.pageY/4);
+
+// Calculate the total number of pairs we'll need to find slots for
+
+
+// Create factorial function to figure out how many total unique pairs there will be
+// Assumes that n is a positive integer  -- recursive function!!!!
+var factorial = function(n) {
+  // Could also be written as
+  // return (n === 0) ? 1 : n * factorial(n - 1);
+
+  if (n === 0) {
+    return 1;
+  } else {
+    return n * factorial(n - 1);
+  }
+};
+
+console.log(studentEmails);
+console.log(studentEmails.length);
+var totalStudents = studentEmails.length;
+var groupSize = 2;
+
+/*
+calculate the total number of pairs that should be made (to be used in knowing how many slots per day need to be filled). Here's the formula from wikipedia:
+function (n, k) = n! / k!(n-k)!  -- where n is the size of the class and k is the group size, i.e. 2
+*/
+
+var totalPairs = factorial(totalStudents) / (factorial(groupSize) * factorial(totalStudents - groupSize));
+
+// Calculate the total available slots per day
+
+
+var totalSlotsPerDay = Math.floor(studentEmails.length / groupSize);
+var daysOfUniquePairs = totalPairs/totalSlotsPerDay;
+console.log('totalStudents', totalStudents, 'totalPairs', totalPairs, 'totalSlotsPerDay', totalSlotsPerDay, 'daysOfUniquePairs', daysOfUniquePairs);
+
+// create list of all possible unique pairs - use emails to prevent duplication of pairs
+	var uniquePairList = [];
+
+	for (var k = 0; k < studentEmails.length; k++) {
+		for (var l = 1; l < studentEmails.length; l++) {
+			if (studentEmails[k] === studentEmails[l]) {  
+				break;
+			} else {
+				var tempPair = [ studentEmails[k], studentEmails[l] ];
+				// find out if tempPair is already in pair
+				if ( uniquePairList.indexOf(tempPair) === -1) {
+					uniquePairList.push(tempPair);
+				}
 			}
-		}); -->
+		}
+	}
+
+	var daysPairs = "";
+	var pairOptions = uniquePairList;
+	console.log(pairOptions);
+	var restorePairOptions = [];
+	var tempUsedPairs = [];
+	var daysPairsStr = "";
+//try putting all pairs into pair arrays first, then pushing unused pairs
+	function eachDaysPairs (pairArray) {
+		var pairNumber = 0; // just assigns a number to each day's pairs
+		var unusedPairs = []; // array to store pairs that are not used in day, to be used as source for next day's pairs options
+		var tempDaysPairs = "";
+		var tempUnusedPairs = [];
+		restorePairOptions = [];
+
+		// will store one day's complete set of pairs, then be erased to store the next day's pairs, etc.
+		for (var i = 0; i < pairArray.length; i++) {
+			// isolate each student email to be used to see if either name already exists in tempDaysPairs
+			var firstStudentInPair = pairArray[i][0];
+			var secondStudentInPair = pairArray[i][1];
+			//console.log(i, firstStudentInPair, secondStudentInPair);
+			// if either student is already in the day's set of pairs, push the pair into the next day's pool (unusedPairs)
+			if ( tempDaysPairs.includes(firstStudentInPair) === true || tempDaysPairs.includes(secondStudentInPair) === true) {
+				unusedPairs.unshift(pairArray[i]); // unused pairs pool
+				restorePairOptions.push(pairArray[i]); // rebuild pair option in different order in case of failure to fill totalSlotsPerDay
+			} else {
+			// if either student is not already in the day's set of pairs, add them 
+				tempUsedPairs.unshift(pairArray[i]);
+				restorePairOptions.push(pairArray[i]); // rebuild pair options in different order in case of failure to fill totalSlotsPerDay
+				pairNumber++;
+				tempDaysPairs += "<p>Pair " + pairNumber + ": " + pairArray[i] + "</p>";	
+			}
+		}
+		daysPairsStr = tempDaysPairs;
+		pairOptions = unusedPairs;
+	}
+
+
+	var dayCounter = 1;
+	var runPairer = function () {
+		eachDaysPairs(pairOptions);
+
+		console.log(pairOptions.length);
+		if (tempUsedPairs.length !== totalSlotsPerDay) {
+			pairOptions = restorePairOptions;
+			var pairOptionsPop = pairOptions.pop();
+			console.log(pairOptions, pairOptionsPop);
+			pairOptions.unshift(pairOptionsPop);
+			//console.log(pairOptions);
+			tempUsedPairs = [];
+		} else {
+			$('body').append('<hr>Day ' + dayCounter);
+			$('body').append(daysPairsStr);				
+			dayCounter++;
+		}
+	}
+
+	while (pairOptions.length > 1) {
+		runPairer();
+	}
+
+
+
+/*******************
+*   GHOST SCRIPT   *
+*******************/
+
+	// var downMouse = false;
+
+	// $('body').mousedown( function() {
+	// 	downMouse = true;
+	// });
+
+	// $('body').mouseup( function() {
+	// 	downMouse = false;
+	// });
+
+	// $('html').mousemove( function(){
+	// 	if (downMouse === true) {
+	// 		event.preventDefault();
+	// 	   $('#ghost').css('left', event.pageX - event.pageX/4);
+	// 	   $('#ghost').css('top', event.pageY - event.pageY/4);
+	// 	}
+	// }); 
 
 
 	</script>
