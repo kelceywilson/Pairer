@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="halfhack.css">
+	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+	<script src="http://underscorejs.org/underscore-min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<form id="studentForm" action="https://formspree.io/kelcey@wilson.com" method="post"> 
+		<!-- // ensure all input, select and textarea elements have name attribute see formspree.io for instructions-->
+			<input type="text" value="full name" name="fullname"><br>
+			<input type="email" value="email address" name="email"><br>
+			<input type="submit" value="Submit"><br>
+		</form>
+	</div>
+<script type="text/javascript">
+// !!  action item -- put js in seperate file
+
+// write handlers for input events
+
+
+/*
+ Write script to create as many unique pairs as possible out of a class list
+ and then assign each of those pairs a day, ensuring a) that all individuals are paired everay day, and b) that no individual is assigned to the same day twice.
+ 	Once this is completed, be sure deal with an class composed of an odd number of indivisuals.
+ 	Probably best to assign a fake person to the leftover individual. 
+*/
+
+// order matters -- order pairs so that pairSlotter works properly
+var uniquePairList = [];
+
+// thank you ruthie!!! - my pairmakers wasn't doing it
+function uniquePairmaker(set, k) {
+
+  var setSize = set.length;
+  var combs;
+  var head;
+  var tailcombs;
+
+  // case: group size is 1
+  if (k === 1) {
+    combs = [];
+    for (var i = 0; i < setSize; i++) {
+      combs.push([set[i]]);
+    }
+    return combs;
+  }
+
+  // between 1 and (set size - 1)
+  combs = [];
+  for (var i = 0; i < setSize - k + 1; i++) {
+    head = set.slice(i, i + 1);
+    tailcombs = uniquePairmaker(set.slice(i + 1), k - 1);
+    for (var j = 0; j < tailcombs.length; j++) {
+      combs.push(head.concat(tailcombs[j]));
+    }
+  }
+  return combs;
+}
+
+// start from scratch
+// again -- order matters try starting by filling all sessions with a single individual's pairs
+// to at least ensure each session starts with one pair eliminated
+  // how?  create an array of days
+  // array needs to be filled with pre-existing objects to push the day of pairs into
+
+function pairSlotter( thisClass ){
+// Build array of just student emails
+  var thisClassSize = thisClass.length;
+  var uniquePairList = uniquePairmaker(thisClass, 2);
+  console.log(uniquePairList);
+  var uniquePairQuantity = uniquePairList.length;
+  var slotsPerDay = classSize / 2;
+  var daysOfUniquePairs = uniquePairQuantity / slotsPerDay;
+  var days = [];
+  for (var i = 0; i < daysOfUniquePairs; i++) {
+    days[i] = {
+      'daycount': i + 1,  // make day-numbering easy - not sure why but keys needed quotes
+      'pairList': [],  // js needs to know it's an array
+      'individuals': []  // flatten pairList to make dupecheck easy
+    };
+  }
+
+  // slot every unique pair into a day such that
+  //  - every unique pair meets exacly once
+  //  - no individual is paired more than once per day
+  var pairPoolQty = uniquePairQuantity; // this is the number of unassignedGroups 
+  var tempPair;  // pair being checked
+  var tempPairTracker; // indicates which pair to use
+  var tempDay;  // day being filled
+  var isAssignable; // to help pass over next function w/o convolution - thanks ruthie!!!
+  var isUnassignable; // added to avoid if/else convolution -- thanks again ruthiee!!!!
+  var pairsPassed = [];
+  // pairing should continue until all pairs are exhausted
+
+  while ( pairPoolQty > 0 ) {
+    isUnassignable = true;  
+
+    for (var i = 0; i < daysOfUniquePairs; i++) {
+      // if the choices have been exhaused, trash day & try again
+	    if ( pairPoolQty === 0 ){
+	      break;
+	    }
+
+  	  // keep a temp level of dayList to ensure all day's slots are filled before pushing to daylist
+      currGroupIdx = uniquePairQuantity - pairPoolQty; // groups.length - groups.length = 0 at start
+      tempPair = uniquePairList[currGroupIdx];
+      tempDay = days[i];
+      //if thisPair is in tempDayList, don't add it -- loop over both individuals
+    
+
+      isAssignable = true;  
+      for (var j = 0; j < tempPair.length; j++) {
+        if (tempDay.individuals.indexOf(tempPair[j]) !== -1) {
+          //
+          isAssignable = false;
+          break;
+        }
+      }
+
+      if (isAssignable) {
+        isUnassignable = false;
+        tempDay.pairList.push(tempPair);
+        tempDay.individuals = tempDay.individuals.concat(tempPair);
+        pairPoolQty--;
+      }
+    }
+
+    if (isUnassignable) {
+      pairsPassed.push(tempPair);
+      pairPoolQty--;
+    }
+  }
+  return days;
+}
+
+// !!  action item -- change this so that classPopulator runs after input box is filled and Submit button is pressed
+// display schedule in html
+function displaySchedule(schedule) {
+  for (var i = 0; i < schedule.length; i++) {
+    console.log('DAY ', schedule[i].daycount);
+    $('body').append('<hr>DAY ' + schedule[i].daycount + ' - ');
+    for (var j = 0; j < schedule[i].pairList.length; j++) {
+      console.log('PAIR ', schedule[i].pairList[j]);
+      $('body').append('  *  ' + schedule[i].pairList[j]);        
+    }
+  }
+}
+
+
+// for demonsration purposes, create a function that builds a students array of any size
+var students = [];
+
+classPopulator = function(size) {
+  for (var i = 0; i < size; i++) {
+    students[i] = {
+      'name': i.toString(),
+      'email': i.toString() + "@foo.com"
+    }; // you have to create the empty object before you can assign it properties
+  }
+}
+
+var classSize = parseInt(prompt("What size is your class?"));
+classPopulator(classSize);
+console.log(students);
+//var studentEmails = students.map( function(studentObj, i){ return studentObj.email; } );
+
+var studentEmails = [];
+
+function studentEmailExtractor (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    studentEmails.push(arr[i].email);
+  }
+}
+
+studentEmailExtractor(students);
+
+console.log(studentEmails);
+
+var days = pairSlotter(studentEmails);
+
+displaySchedule(days);
+
+/*
+calculate the total number of pairs that should be made (to be used in knowing how many slots per day need to be filled). Here's the formula from wikipedia:
+function (n, k) = n! / k!(n-k)!  -- where n is the size of the class and k is the group size, i.e. 2
+*/
+// factorial = function(n) {
+//   // Could also be written as
+//   // return (n === 0) ? 1 : n * factorial(n - 1);
+//   if (n === 0) {
+//     return 1;
+//   } else {
+//     return n * factorial(n - 1);
+//   }
+// }
+
+// var totalPairs = factorial(totalStudents) / (factorial(2) * factorial(totalStudents - 2));
+
+// pairSlotter(uniquePairList);
+
+// Calculate the total available slots per day
+
+//console.log('totalStudents', totalStudents, 'totalPairs', totalPairs, 'totalSlotsPerDay', totalSlotsPerDay, 'daysOfUniquePairs', daysOfUniquePairs);
+
+// create list of all possible unique pairs - use emails to prevent duplication of pairs
+// function nothing(){
+//  alert('nothing');
+// }
+
+
+
+
+// function dayPairer(poolArray, poolSize) {
+//   for (var i = 0; i < poolSize; i++) {
+	
+	
+//   	// if an individual is already slotted, pass over
+//   	// requires a day list to check -- dayList
+//     console.log(flatDayList);
+//     for (var i = 0; i < totalSlotsPerDay.length; i++) {
+
+// 	   	  console.log(dayList);
+// 		  flatDayList = _.flatten(dayList);
+// 	   	  var pair = poolArray[i];
+// 	   	  var individual1 = pair[0];
+// 	   	  var individual2 = pair[1];
+// 	   	  console.log( individual1, individual2);
+// 	  	  if ( flatDayList.indexOf(individual1) !== -1 || flatDayList.indexOf(individual2) !== -1 ) {
+
+
+// 	  	  	// console.log("individual already paired today")
+//   	  	break;
+//   	  } else {
+//   	  // if neither individual in pair is already slotted, add pair to dayList 
+// 	    dayList.push(poolArray[i]);
+// 	  }
+//   	  	}
+// 	}
+//   }
+
+//   // remove used pairs from pairListPool
+//   function pullPair(element){
+//   	return element !== pair;
+//   }
+
+//   for (var i = 0; i < dayList.length; i++) {
+//   	console.log(dayList[i]);
+//   	pair = dayList[i];
+//   	console.log(poolArray);
+//     poolArray = poolArray.filter( pullPair );
+//   }
+//   console.log(poolArray);
+//   pairPool = poolArray.slice();
+//   return dayList;
+// }
+
+
+
+// var pairListPool = uniquePairList.slice();
+// var day = 1
+// while (pairListPool.length > 0) {  // repeats functions asl long as pairListPool has pairs
+// 	dayPairer(pairListPool, pairListPool.length); //fill day with pairs
+// 	console.log(pairPool);
+// 	pairListPool = pairPool.slice();
+// 	console.log(pairListPool);
+// 	console.log(dayList);
+// 	$('body').append('<br>Day ' + day + ':<br>' + dayList);
+// 	day++;
+
+// }
+
+// need to prettify - add names & format better
+// need to attach to google sheet
+// need to allow for input by either one by on or paste entire class
+
+
+
+/*******************
+*   GHOST SCRIPT   *
+*******************/
+
+	// var downMouse = false;
+
+	// $('body').mousedown( function() {
+	// 	downMouse = true;
+	// });
+
+	// $('body').mouseup( function() {
+	// 	downMouse = false;
+	// });
+
+	// $('html').mousemove( function(){
+	// 	if (downMouse === true) {
+	// 		event.preventDefault();
+	// 	   $('#ghost').css('left', event.pageX - event.pageX/4);
+	// 	   $('#ghost').css('top', event.pageY - event.pageY/4);
+	// 	}
+	// }); 
+
+
+	</script>
+</body>
+</html>
