@@ -2,62 +2,116 @@
 <html lang="en">
 <head>
 	<title></title>
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 	<link rel="stylesheet" type="text/css" href="halfhack.css">
 	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 	<script src="http://underscorejs.org/underscore-min.js"></script>
+  <meta charset='utf-8'>
+  <meta content='IE=edge' http-equiv='X-UA-Compatible'>
+  <meta content='width=device-width, initial-scale=1' name='viewport'>
+</head>
+  <body>
+    <!-- Contact Form - sent to a Google Sheet -->
+    
 </head>
 
 <body>
-	<div class="container">
-		<!-- <form id="studentForm" action="https://formspree.io/kelcey@wilson.com" method="post">  -->
-		<!-- // ensure all input, select and textarea elements have name attribute see formspree.io for instructions-->
-      <input id="fullName" type="text" value="full name" name="fullname"><br>
-      <input id="emailAddress" type="email" value="email@address.com" name="email"><br>
-      <input id="submitStudent" type="submit" value="Submit"><br>
-      <input id="submitClass" type="submit" value="Submit Class"><br>
-      <input type="text" value="fake class size" name="fakeClassSize"><br>
-		<!-- </form> -->
-	</div>
-  https://docs.google.com/forms/d/e/1FAIpQLSc0Q93Q03wjXYUKNfsD7BVgS7nBCZ8uGRUh3a13bPtLaJw_fA/viewform
+  <div class="container">
+    <form id='foo'>
+      <p>
+        <label>Full Name</label>
+        <input id='name' name='name' type='text'>
+      </p><p>
+        <label>Email Address</label>
+        <input id='email' name='email' type='email'>
+      </p><p>
+        <label>Phone Number</label>
+        <input id='phone' name='phone' type='tel'>
+      </p><p>
+        <label>Location (city, etc.)</label>
+        <input id='location' name='location' type='text'>
+      </p><p>
+        <label>Time Zone</label>
+        <input id='timezone' name='timezone' type='text'>
+      </p><p>
+        <label>Operating System</label>
+        <input id='os' name='os' type='text'>
+      </p><p>
+        <label>Text Editor</label>
+        <input id='editor' name='editor' type='text'>
+      </p>
+      </p><p>
+        <label>GitHub Handle</label>
+        <input id='github' name='github' type='text'>
+      </p>
+      </p><p>
+        <label>Slack Handle</label>
+        <input id='slack' name='slack' type='text'>
+      </p>
+        <div id='success'></div>
+        <button type='submit'>Add Student</button>
+    </form>
+  </div>
+<!--   <div>
+    <form id='pairStudentsNow'>
+      <button type='submit'>Build Student Pair Schedule</button>
+    </form>
+  </div> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <!-- Custom Theme JavaScript -->
+  <script src='google-sheet.js'></script>	
+    <!-- <form id="studentForm" action="https://formspree.io/kelcey@wilson.com" method="post">  -->
+
+  <!-- <div style="display:none;" id="thankyou_message">
+    <h2><em>Thanks</em> for being submissive!</h2>
+  </div> -->
+
 <script type="text/javascript">
 // !!  action item -- put js in seperate file
-
+//var students = [];
 // write handlers for input events
-var nameInput = document.getElementById("fullName");
-var emailInput = document.getElementById("emailAddress");
-var submitStudentButton = document.getElementById("submitStudent");
-var submitClassButton = document.getElementById("submitClass");
 
-function displayAndAddStudent(){
-  $("body").append( "<br>"  + nameInput.value + " - " + emailInput.value + " added to class." );
-  //make student object to push to students[]
-  students.push( {
-      'name': nameInput.value,
-      'email': emailInput.value,
-      'location': ''.
-      'timezone': '',    // can default pull from ip address location?
-      'os': '',
-      'textEditor': '',
-      'github': '',
-      'slack': ''
+// var nameInput = document.getElementById("fullName");
+// var emailInput = document.getElementById("email");
+// var locationInput = document.getElementById("location");
+// var timezoneInput = document.getElementById("timezone");
+// var osInput = document.getElementById("os");
+// var textEditorInput = document.getElementById("textEditor");
+// var githubInput = document.getElementById("github");
+// var slackInput = document.getElementById("slack");
+// var submitStudentButton = document.getElementsByTagName("submit");
+// var submitClassButton = document.getElementById("submitClass");
 
-  });
-  console.log(students);
-}
+// function displayAndAddStudent(){
+//   //$("body").append( "<br>"  + nameInput.value + " - " + emailInput.value + " added to class." );
+//   //make student object to push to students[]
+//   students.push( {
+//       'name': nameInput.value,
+//       'email': emailInput.value,
+//       'location': locationInput.value,
+//       'timezone': timezoneInput.value,    // can default pull from ip address location?
+//       'os': osInput.value,
+//       'textEditor': textEditorInput.value,
+//       'github': githubInput.value,
+//       'slack': slackInput.value
+//   });
+//   console.log(students);
+// }
 
 // add edit & delete buttons
 
 // add new student to students array and display on page
-submitStudentButton.onclick = function(){
-  var newStudent = displayAndAddStudent();
-}
+// submitStudentButton.onclick = function(){
+//   var newStudent = displayAndAddStudent();
+// }
 
 // when class is complete run pairer
   // create second button to run pairer based on students array
     // ask with alert if class is full 
-submitClassButton.onclick = function(){
-  pairSlotter()
-}
+// submitClassButton.onclick = function(){
+//   pairSlotter(students)
+// }
 
 /*
  Write script to create as many unique pairs as possible out of a class list
@@ -189,7 +243,7 @@ function displaySchedule(schedule) {
 }
 
 // for demonsration purposes, create a function that builds a students array of any size
-var students = [];
+
 
 classPopulator = function(size) {
   for (var i = 0; i < size; i++) {
@@ -199,27 +253,27 @@ classPopulator = function(size) {
     }; // you have to create the empty object before you can assign it properties
   }
 }
+// var students = [];
+// var classSize = parseInt(prompt("What size is your class?"));
+// classPopulator(classSize);
+// console.log(students);
+// //var studentEmails = students.map( function(studentObj, i){ return studentObj.email; } );
 
-var classSize = parseInt(prompt("What size is your class?"));
-classPopulator(classSize);
-console.log(students);
-//var studentEmails = students.map( function(studentObj, i){ return studentObj.email; } );
+// var studentEmails = [];
 
-var studentEmails = [];
+// function studentEmailExtractor (arr) {
+//   for (var i = 0; i < arr.length; i++) {
+//     studentEmails.push(arr[i].email);
+//   }
+// }
 
-function studentEmailExtractor (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    studentEmails.push(arr[i].email);
-  }
-}
+// studentEmailExtractor(students);
 
-studentEmailExtractor(students);
+// console.log(studentEmails);
 
-console.log(studentEmails);
+// var days = pairSlotter(studentEmails);
 
-var days = pairSlotter(studentEmails);
-
-displaySchedule(days);
+//displaySchedule(days);
 
 // need to prettify - add names & format better
 // need to attach to google sheet
